@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "908797335681",
+    "project_id": "fir-meal-99bca",
+    "storage_bucket": "fir-meal-99bca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908797335681:android:56eae728d01bad61605580",
+        "android_client_info": {
+          "package_name": "com.example.demo_meal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908797335681-vo0fplev571iqd4l24o03agdg8f1ca6l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlhAbiEI8JhJvfDhizO8cWkcoYf4P_qFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908797335681-vo0fplev571iqd4l24o03agdg8f1ca6l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "908797335681-5vm98d1q2r3o6v779deaqi3grsfpan6b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demoMeal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
