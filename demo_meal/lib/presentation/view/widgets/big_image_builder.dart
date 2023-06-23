@@ -17,7 +17,7 @@ class BigImageBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     width = scaleDimension.screenWidth -
-        ((!isFullWidth) ? scaleDimension.scaleWidth(50) : 0);
+        ((!isFullWidth) ? scaleDimension.scaleWidth(50) : -scaleDimension.scaleWidth(11));
     height = isFullWidth
         ? scaleDimension.scaleHeight(220)
         : scaleDimension.scaleHeight(200);

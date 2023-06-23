@@ -2,6 +2,7 @@ import 'package:demo_meal/presentation/controller/meal_controller/meal_cubit.dar
 import 'package:demo_meal/presentation/view/widgets/big_image_builder.dart';
 import 'package:demo_meal/presentation/view/widgets/big_text.dart';
 import 'package:demo_meal/presentation/view/widgets/normal_text.dart';
+import 'package:demo_meal/utils/app_constansts.dart';
 import 'package:demo_meal/utils/dimension_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -80,19 +81,24 @@ class HomePage extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
                 itemBuilder: (_, index) {
-                  return Row(
-                    children: [
-                      InkWell(
-                        child: BigImageBuilder(
-                          imgPath: recommendedMeals[0].imgPath,
-                          title: recommendedMeals[0].name,
-                          isFullWidth: false,
+                  return InkWell(
+                    onTap: (){
+                      Navigator.of(context).pushNamed(AppConstants.mealsPath);
+                    },
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: BigImageBuilder(
+                            imgPath: recommendedMeals[0].imgPath,
+                            title: recommendedMeals[0].name,
+                            isFullWidth: false,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: scaleDimension.scaleWidth(10),
-                      )
-                    ],
+                        SizedBox(
+                          width: scaleDimension.scaleWidth(10),
+                        )
+                      ],
+                    ),
                   );
                 }),
           )

@@ -6,35 +6,41 @@ import '../data/repository/meal_repository.dart';
 
 class Dependancey
 {
+  //make instance of dimension class
+   void initDimension(BuildContext context)
+   {
+    var locator= GetIt.instance;
+    // init dimension class that make app responsive
+    try{
+      locator.get<Dimension>();
+    }
+    catch(e)
+    {
+      locator.registerSingleton(Dimension(context: context));
+    }
+  }
   // make instance of classes that same object may be needed in different places
-  Future<void> init (BuildContext context)
-  async {
+  void init ()
+   {
     GetIt locator = GetIt.instance;
     // instance of firebase library
     try{
-     await locator.get<RemoteDataSource>();
+      locator.get<RemoteDataSource>();
     }
     catch (e)
     {
-     await locator.registerSingleton(RemoteDataSource());
+      locator.registerSingleton(RemoteDataSource());
     }
 
     // instance of meal repository
     try{
-      await locator.get<MealRepository>();
+       locator.get<MealRepository>();
     }
     catch(e)
     {
-      await locator.registerSingleton(MealRepository(remoteDataSource: locator.get<RemoteDataSource>()));
+       locator.registerSingleton(MealRepository(remoteDataSource: locator.get<RemoteDataSource>()));
     }
-    // init dimension class that make app responsive
-    try{
-      await locator.get<Dimension>();
-    }
-    catch(e)
-    {
-     await locator.registerSingleton(Dimension(context: context));
-    }
+
 
   }
 }

@@ -1,5 +1,6 @@
 import 'package:demo_meal/data/data_source/remote_data_source/remote_data_source.dart';
 import 'package:demo_meal/presentation/controller/meal_controller/meal_cubit.dart';
+import 'package:demo_meal/presentation/controller/order_controller/order_cubit.dart';
 import 'package:demo_meal/presentation/view/pages/home_page.dart';
 import 'package:demo_meal/utils/app_routing.dart';
 import 'package:demo_meal/utils/dependancy.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  Dependancey().init();
   dynamic data = await MealRepository(remoteDataSource: RemoteDataSource())
       .getMeals();
   print("Data is => {$data}");
@@ -28,16 +30,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Dependancey().init(context);
     return BlocProvider(
-      create: (context) => MealCubit(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      create: (context) => OrderCubit(),
+      child: BlocProvider(
+        create: (context) => MealCubit(),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          onGenerateRoute: AppRouting.generateRoutes,
+          //    home:HomePage() ,
         ),
-        onGenerateRoute: AppRouting.generateRoutes,
-        //    home:HomePage() ,
       ),
     );
   }
