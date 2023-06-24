@@ -1,5 +1,6 @@
 
 import 'package:demo_meal/presentation/view/pages/profile_page.dart';
+import 'package:demo_meal/presentation/view/pages/running_order_page.dart';
 import 'package:demo_meal/utils/dependancy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class BottomNavBarPage extends StatelessWidget {
   List<Widget> _buildScreens() {
     return [
       HomePage(),
-      Container(),
+      RunningOrderPage(),
       ProfilePage(),
 
 

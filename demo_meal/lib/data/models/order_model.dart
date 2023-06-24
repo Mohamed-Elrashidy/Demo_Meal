@@ -7,7 +7,9 @@ class OrderModel extends Order {
       required super.details,
       required super.deviceToken,
       required super.status,
-      required super.address
+      required super.address,
+        required super.phone,
+        required super.price
       });
 
   toJson()
@@ -18,6 +20,10 @@ class OrderModel extends Order {
     json['details']=details;
     json['deviceToken']=deviceToken;
     json['status']=status;
+    json['price']=price;
+    json['phone']=phone;
+    json['address']=address;
+
     return json;
   }
   factory OrderModel.fromJson(Map<String, dynamic> json) {
@@ -27,7 +33,9 @@ class OrderModel extends Order {
         status: json['status'],
         details:json['details'],
         deviceToken: json['deviceToken'],
-      address: json['address'],
+        price: json['price'],
+        phone: json['phone'],
+        address: json['address'],
 
     );}
 }

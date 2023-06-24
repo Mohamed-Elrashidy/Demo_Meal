@@ -6,6 +6,7 @@ import 'package:demo_meal/presentation/view/pages/home_page.dart';
 import 'package:demo_meal/utils/app_routing.dart';
 import 'package:demo_meal/utils/dependancy.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,11 +19,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Dependancey().init();
+
   runApp(const MyApp());
-  Dependancey().init();
-  dynamic data = await MealRepository(remoteDataSource: RemoteDataSource())
-      .getMeals();
-  print("Data is => {$data}");
+
+
+
 }
 
 class MyApp extends StatelessWidget {

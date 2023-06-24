@@ -5,7 +5,7 @@ import '../entity/order.dart';
 class GetRunningOrdersUseCase{
   BaseOrderRepository baseOrderRepository;
   GetRunningOrdersUseCase({required this.baseOrderRepository});
-  execute()
+  Future<List<Order>>execute()
   async {
   return  await baseOrderRepository.getOrders();
   }

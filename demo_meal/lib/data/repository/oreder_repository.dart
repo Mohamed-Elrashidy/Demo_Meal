@@ -5,33 +5,47 @@ import 'package:demo_meal/utils/app_constansts.dart';
 
 import '../models/order_model.dart';
 
-class OrderRepository extends BaseOrderRepository{
+class OrderRepository extends BaseOrderRepository {
   RemoteDataSource remoteDataSource;
   OrderRepository({required this.remoteDataSource});
 
   @override
   Future<void> makeOrder(Order order) async {
-    OrderModel orderModel=convertFromOrdertoOrderModel(order);
-     await remoteDataSource.addDataDocument(AppConstants.ordersPath, orderModel.toJson());
+    if(order.price!='0.0'&&order.price!='0')
+    {OrderModel orderModel = convertFromOrdertoOrderModel(order);
+    await remoteDataSource.addDataDocument(
+        AppConstants.ordersPath, orderModel.toJson());}
   }
-  
-  
- OrderModel convertFromOrdertoOrderModel(Order order)
-  {
-   return OrderModel(id: order.id, email: order.email, details: order.details, deviceToken: order.deviceToken, status: order.status, address: order.address); 
+
+  OrderModel convertFromOrdertoOrderModel(Order order) {
+    return OrderModel(
+        id: order.id,
+        email: order.email,
+        details: order.details,
+        deviceToken: order.deviceToken,
+        status: order.status,
+        address: order.address,
+        price: order.price,
+        phone: order.phone);
   }
 
   @override
-   getOrders() async {
-    List<OrderModel> orders=[];
-   var data=await remoteDataSource.getDataCollection(AppConstants.ordersPath);
-   data.forEach((element) {
-     OrderModel order=OrderModel.fromJson(element);
-     if(order.status!="Completed")
-       {
-         orders.add(order);
-       }
-   });
-   return orders;
+  getOrders() async {
+    List<OrderModel> orders = [];
+    var data =
+        await remoteDataSource.getDataCollection(AppConstants.ordersPath);
+    data.forEach((element) {
+      OrderModel order = OrderModel.fromJson(element);
+      if (order.status != "Completed") {
+        orders.add(order);
+      }
+    });
+    return orders;
+  }
+
+  @override
+  updateOrderStatus(String token, String newStatus,String documentId) async {
+  await  remoteDataSource.updateDocumentAttribute(AppConstants.ordersPath, [documentId], "status", newStatus);
+  await remoteDataSource.sendPushNotification("Order Status Updated", "Order with $documentId is $newStatus", [token]);
   }
 }

@@ -5,6 +5,8 @@ class Order{
   String deviceToken;
   String status;
   String address;
+  String phone;
+  String price;
 
   Order({
     required this.id,
@@ -12,6 +14,8 @@ class Order{
     required this.details,
     required this.deviceToken,
     required this.status,
-    required this.address
+    required this.address,
+    required this.phone,
+    required this.price
   });
 }

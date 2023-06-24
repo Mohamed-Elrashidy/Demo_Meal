@@ -24,8 +24,8 @@ class Dependancey
     }
   }
   // make instance of classes that same object may be needed in different places
-  void init ()
-   {
+  Future<void> init ()
+   async {
     GetIt locator = GetIt.instance;
     // instance of firebase library
     try{
@@ -60,6 +60,8 @@ class Dependancey
        locator.registerSingleton(OrderRepository(remoteDataSource: locator.get<RemoteDataSource>()));
 
      }
+     //init notification serviece
+     await GetIt.instance.get<RemoteDataSource>().initNotifications();
 
 
   }

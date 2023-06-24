@@ -1,12 +1,14 @@
 import 'package:demo_meal/presentation/controller/order_controller/order_cubit.dart';
+import 'package:demo_meal/presentation/controller/user_controller/user_cubit.dart';
 import 'package:demo_meal/presentation/view/widgets/app_icon.dart';
 import 'package:demo_meal/utils/dimension_scale.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../domain/entity/meal.dart';
+import '../../../domain/entity/user.dart';
 import '../../../utils/routes.dart';
 import '../widgets/big_text.dart';
 import '../widgets/normal_text.dart';
@@ -14,21 +16,20 @@ import '../widgets/normal_text.dart';
 class CartPage extends StatelessWidget {
   Dimension scaleDimension = GetIt.instance.get<Dimension>();
   TextEditingController addressController = TextEditingController();
-
+  User? user;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customAppBar(context),
               cartContentViewer(),
-              textFieldBuilder("Address", "Enter your address", addressController),
+              textFieldBuilder(
+                  "Address", "Enter your address", addressController),
               buyButton(context)
-
             ],
           ),
         ),
@@ -54,7 +55,7 @@ class CartPage extends StatelessWidget {
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           Map<Meal, int> cart =
-          BlocProvider.of<OrderCubit>(context).getCartItems();
+              BlocProvider.of<OrderCubit>(context).getCartItems();
           List<Meal> cartItems = [];
           List<int> numOfApperance = [];
           cart.forEach((key, value) {
@@ -66,8 +67,7 @@ class CartPage extends StatelessWidget {
               itemBuilder: (_, index) {
                 return Padding(
                   padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
-                  child:
-                  cartItemViewer(
+                  child: cartItemViewer(
                       context, cartItems[index], numOfApperance[index]),
                 );
               });
@@ -113,14 +113,16 @@ class CartPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: scaleDimension.scaleWidth(130)
-              ,
+              width: scaleDimension.scaleWidth(130),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [BigText(text: meal.name),
+                children: [
+                  BigText(text: meal.name),
                   BigText(
-                    text: "${meal.price * numOfAppearance}", color: Colors.red,)
+                    text: "${meal.price * numOfAppearance}",
+                    color: Colors.red,
+                  )
                 ],
               ),
             ),
@@ -136,26 +138,29 @@ class CartPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(40))
-      ),
+          borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(40))),
       child: Row(
         children: [
-          IconButton(onPressed: () {
-            BlocProvider.of<OrderCubit>(context).decrement(meal);
-          }, icon: Icon(Icons.remove),),
+          IconButton(
+            onPressed: () {
+              BlocProvider.of<OrderCubit>(context).decrement(meal);
+            },
+            icon: Icon(Icons.remove),
+          ),
           NormalText(text: num.toString()),
-          IconButton(onPressed: () {
-            BlocProvider.of<OrderCubit>(context).increment(meal);
-          }, icon: Icon(Icons.add),),
-
-
+          IconButton(
+            onPressed: () {
+              BlocProvider.of<OrderCubit>(context).increment(meal);
+            },
+            icon: Icon(Icons.add),
+          ),
         ],
       ),
     );
   }
 
-  Widget textFieldBuilder(String title, String hint,
-      TextEditingController controller) {
+  Widget textFieldBuilder(
+      String title, String hint, TextEditingController controller) {
     return Container(
       padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
       width: scaleDimension.screenWidth,
@@ -168,10 +173,10 @@ class CartPage extends StatelessWidget {
           ),
           Container(
             padding:
-            EdgeInsets.symmetric(horizontal: scaleDimension.scaleWidth(10)),
+                EdgeInsets.symmetric(horizontal: scaleDimension.scaleWidth(10)),
             decoration: BoxDecoration(
                 borderRadius:
-                BorderRadius.circular(scaleDimension.scaleWidth(16)),
+                    BorderRadius.circular(scaleDimension.scaleWidth(16)),
                 border: Border.all(color: Colors.grey[400]!, width: 1.5)),
             child: TextField(
               controller: controller,
@@ -192,36 +197,53 @@ class CartPage extends StatelessWidget {
   Widget buyButton(BuildContext context) {
     return BlocBuilder<OrderCubit, OrderState>(
       builder: (context, state) {
-       double cost= BlocProvider.of<OrderCubit>(context).getTotalPrice();
+        double cost = BlocProvider.of<OrderCubit>(context).getTotalPrice();
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InkWell(
-              onTap: (){
-              var user=  FirebaseAuth.instance.currentUser;
-              print("user is => "+user.toString());
-                if(user==null)
-                  {
-                    Navigator.of(context).pushNamed(Routes.loginPage);
-                  }
-                else
-                {BlocProvider.of<OrderCubit>(context).makeOrder(addressController.text);
-                Navigator.of(context).pushNamedAndRemoveUntil(Routes.bottomNavBarPage, (route) => false);}
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                if (state is UserInfoLoaded) user = state.user;
+                return InkWell(
+                  onTap: () async {
+                    if (user == null) {
+                      Navigator.of(context).pushNamed(Routes.loginPage);
+                    } else {
+                      var deviceToken=await FirebaseMessaging.instance.getToken();
+                      BlocProvider.of<OrderCubit>(context).makeOrder(
+                          addressController.text == ""
+                              ? user!.address
+                              : addressController.text,
+                          user!.phone,
+                          BlocProvider.of<OrderCubit>(context)
+                              .getTotalPrice()
+                              .toString(),
+                         deviceToken.toString()
+                         ,
+                          user!.email);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.bottomNavBarPage, (route) => false);
+                    }
+                  },
+                  child: Container(
+                    height: scaleDimension.scaleHeight(50),
+                    width: scaleDimension.scaleWidth(150),
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(
+                            scaleDimension.scaleWidth(20))),
+                    child: Center(
+                        child: BigText(
+                      text: "Buy  $cost",
+                      color: Colors.white,
+                    )),
+                  ),
+                );
               },
-              child: Container(
-                height: scaleDimension.scaleHeight(50),
-                width: scaleDimension.scaleWidth(150),
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(20))
-                ),
-                child: Center(child: BigText(text: "Buy  $cost",color: Colors.white,)),
-              ),
             ),
           ],
         );
       },
     );
   }
-
 }

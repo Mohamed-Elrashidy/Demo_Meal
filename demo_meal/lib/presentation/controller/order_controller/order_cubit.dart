@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:demo_meal/data/repository/oreder_repository.dart';
 import 'package:demo_meal/domain/entity/order.dart';
+import 'package:demo_meal/domain/usecases/get_running_orders.dart';
+import 'package:demo_meal/domain/usecases/update_order_status.dart';
+import 'package:demo_meal/utils/user_level.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
@@ -54,19 +57,21 @@ class OrderCubit extends Cubit<OrderState> {
     return cost;
   }
 
-  Future<void> makeOrder(String address) async {
-    var user = FirebaseAuth.instance.currentUser;
+  Future<void> makeOrder(String address,String phone,String price,String token,String email) async {
+
 
     String id = generateId();
     String details = generateDetails();
 
     Order order = Order(
         id: id,
-        email: user!.email!,
+        email: email,
         details: details,
-        deviceToken: "",
+        deviceToken: token,
         status: "Making",
-        address:""
+        address:address,
+        phone: phone,
+        price: price
     );
     await MakeOrderUseCase(
             baseOrderRepository: GetIt.instance.get<OrderRepository>())
@@ -85,5 +90,36 @@ class OrderCubit extends Cubit<OrderState> {
       details += key.id + ',' + value.toString() + '||';
     });
     return details;
+  }
+
+  getOrders(String email,int level)
+  async {
+
+  var data=  await  GetRunningOrdersUseCase(baseOrderRepository: GetIt.instance.get<OrderRepository>()).execute();
+  List<Order> orders=[];
+  data.forEach((element) {
+    if(level!=3)
+      {
+        orders.add(element);
+      }
+    else
+      {
+        if(element.email==email)
+          orders.add(element);
+
+      }
+
+
+  }
+
+  );
+  emit(OrderLoaded(orders:orders));
+  return orders;
+  }
+
+  updateOrderStatus(String token,String newStatus,String orderId)
+  async {
+    emit(Idle());
+    await UpdateOrderStatusUseCase(baseOrderRepository: GetIt.instance.get<OrderRepository>()).execute(token, newStatus, orderId);
   }
 }

@@ -23,6 +23,15 @@ class MealRepository extends BaseMealRepository{
   @override
   Future<void> makeSale(List<String> documentIds, String saleValue, String title) async {
    await remoteDataSource.updateDocumentAttribute(AppConstants.mealsPath, documentIds,"saleValue" , saleValue);
+   if(saleValue!=0)
+  {var data= await remoteDataSource.getDataCollection(AppConstants.notificationTokens);
+  List<String>usersTokens=[];
+  data.forEach((element) {
+    usersTokens.add(element['token']);
+  });
+  String body="Don't miss this ${saleValue} percent sale ";
+  await remoteDataSource.sendPushNotification(title,body,usersTokens);}
+
   }
   
 }
