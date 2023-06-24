@@ -196,7 +196,7 @@ class CartPage extends StatelessWidget {
             InkWell(
               onTap: (){
                 BlocProvider.of<OrderCubit>(context).makeOrder(addressController.text);
-                Navigator.of(context).pushNamedAndRemoveUntil(Routes.homePage, (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(Routes.bottomNavBarPage, (route) => false);
               },
               child: Container(
                 height: scaleDimension.scaleHeight(50),

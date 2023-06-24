@@ -12,7 +12,7 @@ class MealRepository extends BaseMealRepository{
    getMeals() async {
     List<Meal> meals=[];
     // get data and convert it to meal type
-   List<dynamic>jsonMeals= await remoteDataSource.getData(AppConstants.mealsPath); 
+   List<dynamic>jsonMeals= await remoteDataSource.getDataCollection(AppConstants.mealsPath);
    for(var meal in jsonMeals)
    {
      meals.add(MealModel.fromJson(meal));

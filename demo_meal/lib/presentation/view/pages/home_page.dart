@@ -15,21 +15,14 @@ import '../../../domain/entity/meal.dart';
 
 class HomePage extends StatelessWidget {
   List<Meal> allMeals = [];
-  late Dimension scaleDimension;
+  late Dimension scaleDimension=GetIt.instance.get<Dimension>();
 
   @override
   Widget build(BuildContext context) {
-    try {
-      scaleDimension = GetIt.instance.get<Dimension>();
-    } catch (e) {
-      GetIt.instance.registerSingleton(Dimension(context: context));
-      scaleDimension = GetIt.instance.get<Dimension>();
-    }
-
     BlocProvider.of<MealCubit>(context).getMeals();
     return SafeArea(
       child: Scaffold(
-          // page main file blocbuilder check if data is here or not and determine what to draw
+          // page main file bloc builder check if data is here or not and determine what to draw
           body: BlocBuilder<MealCubit, MealState>(
         builder: (context, state) {
           if (state is MealLoaded) {
@@ -84,7 +77,7 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (_, index) {
                   return InkWell(
                     onTap: (){
-                      Navigator.of(context).pushNamed(Routes.mealPage,arguments: recommendedMeals[0]);
+                      Navigator.of(context,rootNavigator: true).pushNamed(Routes.mealPage,arguments: recommendedMeals[0]);
                     },
                     child: Row(
                       children: [
@@ -128,7 +121,7 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: (){
-                      Navigator.of(context).pushNamed(Routes.mealPage,arguments:allMeals[index % allMeals.length] );
+                      Navigator.of(context,rootNavigator: true).pushNamed(Routes.mealPage,arguments:allMeals[index % allMeals.length] );
                     },
                     child: Column(
                       children: [

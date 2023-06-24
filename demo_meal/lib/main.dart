@@ -1,6 +1,7 @@
 import 'package:demo_meal/data/data_source/remote_data_source/remote_data_source.dart';
 import 'package:demo_meal/presentation/controller/meal_controller/meal_cubit.dart';
 import 'package:demo_meal/presentation/controller/order_controller/order_cubit.dart';
+import 'package:demo_meal/presentation/controller/user_controller/user_cubit.dart';
 import 'package:demo_meal/presentation/view/pages/home_page.dart';
 import 'package:demo_meal/utils/app_routing.dart';
 import 'package:demo_meal/utils/dependancy.dart';
@@ -31,16 +32,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OrderCubit(),
+      create: (context) => UserCubit(),
       child: BlocProvider(
-        create: (context) => MealCubit(),
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
+        create: (context) => OrderCubit(),
+        child: BlocProvider(
+          create: (context) => MealCubit(),
+          child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            onGenerateRoute: AppRouting.generateRoutes,
+            //    home:HomePage() ,
           ),
-          onGenerateRoute: AppRouting.generateRoutes,
-          //    home:HomePage() ,
         ),
       ),
     );

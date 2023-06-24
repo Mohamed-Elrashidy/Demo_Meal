@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 class RemoteDataSource{
-
 //get data from firebase
-Future<List<Map<String, dynamic>>>getData(String path)
+Future<List<Map<String, dynamic>>>getDataCollection(String path)
   async {
+
     // make reference to data endpoint
     CollectionReference collectionReference = FirebaseFirestore.instance.collection(path);
    // get data
@@ -21,6 +22,40 @@ Future<List<Map<String, dynamic>>>getData(String path)
   /*  print("Data is =>");
 print(dataList);*/
     return dataList;
+    }
+getDataDocumentation(String collectionPath,String documentId)
+async {
+   CollectionReference data = FirebaseFirestore.instance.collection(collectionPath);
+   var datafetched= await data.doc(documentId).get();
+   print("data is => "+ datafetched.data().toString());
+   return datafetched.data() as Map<String,dynamic>;
+
+}
+
+
+
+
+
+
+
+
+
+     signIn(String email,String password)
+    async {
+    try{  UserCredential cerdintial = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+
+    }
+        catch(e)
+      {
+        print(e);
+      }
+    }
+    Future<void> signOut()
+    async {
+      await FirebaseAuth.instance.signOut();
+
     }
 
 }

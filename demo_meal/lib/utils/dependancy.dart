@@ -1,4 +1,5 @@
 import 'package:demo_meal/data/data_source/remote_data_source/remote_data_source.dart';
+import 'package:demo_meal/data/repository/user_repository.dart';
 import 'package:demo_meal/utils/dimension_scale.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
@@ -6,6 +7,8 @@ import '../data/repository/meal_repository.dart';
 
 class Dependancey
 {
+
+
   //make instance of dimension class
    void initDimension(BuildContext context)
    {
@@ -39,6 +42,14 @@ class Dependancey
     catch(e)
     {
        locator.registerSingleton(MealRepository(remoteDataSource: locator.get<RemoteDataSource>()));
+    }
+    // instance of user repository
+  try{
+       locator.get<UserRepository>();
+    }
+    catch(e)
+    {
+       locator.registerSingleton(UserRepository(remoteDataSource: locator.get<RemoteDataSource>()));
     }
 
 
