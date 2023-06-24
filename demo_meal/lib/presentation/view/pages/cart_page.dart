@@ -1,6 +1,7 @@
 import 'package:demo_meal/presentation/controller/order_controller/order_cubit.dart';
 import 'package:demo_meal/presentation/view/widgets/app_icon.dart';
 import 'package:demo_meal/utils/dimension_scale.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -19,15 +20,17 @@ class CartPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
 
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customAppBar(context),
-            cartContentViewer(),
-            textFieldBuilder("Address", "Enter your address", addressController),
-            buyButton(context)
-             
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              customAppBar(context),
+              cartContentViewer(),
+              textFieldBuilder("Address", "Enter your address", addressController),
+              buyButton(context)
+
+            ],
+          ),
         ),
       ),
     );
@@ -195,8 +198,15 @@ class CartPage extends StatelessWidget {
           children: [
             InkWell(
               onTap: (){
-                BlocProvider.of<OrderCubit>(context).makeOrder(addressController.text);
-                Navigator.of(context).pushNamedAndRemoveUntil(Routes.bottomNavBarPage, (route) => false);
+              var user=  FirebaseAuth.instance.currentUser;
+              print("user is => "+user.toString());
+                if(user==null)
+                  {
+                    Navigator.of(context).pushNamed(Routes.loginPage);
+                  }
+                else
+                {BlocProvider.of<OrderCubit>(context).makeOrder(addressController.text);
+                Navigator.of(context).pushNamedAndRemoveUntil(Routes.bottomNavBarPage, (route) => false);}
               },
               child: Container(
                 height: scaleDimension.scaleHeight(50),

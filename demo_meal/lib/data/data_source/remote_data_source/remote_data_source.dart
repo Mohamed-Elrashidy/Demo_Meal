@@ -31,7 +31,14 @@ async {
    return datafetched.data() as Map<String,dynamic>;
 
 }
+addDataDocument(String collectionPath,dynamic data)
+async {
+  print ('reached => '+data.toString());
+  final collectionReference = FirebaseFirestore.instance.collection(collectionPath);
+  final documentReference = collectionReference.doc(data['id']);
+  await documentReference.set(data);
 
+}
 updateDocumentAttribute(String collectionPath,List<String> documentIds,String attributeName,String newValue)
 async {
   final collectionReference = FirebaseFirestore.instance.collection(collectionPath);
@@ -47,13 +54,6 @@ async {
   }
 
 }
-
-
-
-
-
-
-
      signIn(String email,String password)
     async {
     try{  UserCredential cerdintial = await FirebaseAuth.instance

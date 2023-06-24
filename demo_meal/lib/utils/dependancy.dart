@@ -1,4 +1,5 @@
 import 'package:demo_meal/data/data_source/remote_data_source/remote_data_source.dart';
+import 'package:demo_meal/data/repository/oreder_repository.dart';
 import 'package:demo_meal/data/repository/user_repository.dart';
 import 'package:demo_meal/utils/dimension_scale.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,6 +52,14 @@ class Dependancey
     {
        locator.registerSingleton(UserRepository(remoteDataSource: locator.get<RemoteDataSource>()));
     }
+    try{
+      locator.get<OrderRepository>();
+    }
+    catch(e)
+     {
+       locator.registerSingleton(OrderRepository(remoteDataSource: locator.get<RemoteDataSource>()));
+
+     }
 
 
   }
