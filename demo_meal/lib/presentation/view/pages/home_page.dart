@@ -4,6 +4,7 @@ import 'package:demo_meal/presentation/view/widgets/big_text.dart';
 import 'package:demo_meal/presentation/view/widgets/normal_text.dart';
 import 'package:demo_meal/utils/app_constansts.dart';
 import 'package:demo_meal/utils/dimension_scale.dart';
+import 'package:demo_meal/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -83,7 +84,7 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (_, index) {
                   return InkWell(
                     onTap: (){
-                      Navigator.of(context).pushNamed(AppConstants.mealsPath);
+                      Navigator.of(context).pushNamed(Routes.mealPage,arguments: recommendedMeals[0]);
                     },
                     child: Row(
                       children: [
@@ -124,20 +125,25 @@ class HomePage extends StatelessWidget {
             width: scaleDimension.screenWidth - scaleDimension.scaleWidth(20),
             child: ListView.builder(
                 itemCount: 5,
-                itemBuilder: (_, index) {
-                  return Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          imageViewer(allMeals[index % allMeals.length].imgPath),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: (){
+                      Navigator.of(context).pushNamed(Routes.mealPage,arguments:allMeals[index % allMeals.length] );
+                    },
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            imageViewer(allMeals[index % allMeals.length].imgPath),
 
-                          dataViewer(allMeals[index % allMeals.length].name,
-                              allMeals[index % allMeals.length].ingredients),
-                        ],
-                      ),
-                      SizedBox(height: scaleDimension.scaleHeight(10),)
-                    ],
+                            dataViewer(allMeals[index % allMeals.length].name,
+                                allMeals[index % allMeals.length].ingredients),
+                          ],
+                        ),
+                        SizedBox(height: scaleDimension.scaleHeight(10),)
+                      ],
+                    ),
                   );
                 }),
           )

@@ -43,5 +43,21 @@ class OrderCubit extends Cubit<OrderState> {
   {
     return _cart[meal]??0;
   }
+  Map<Meal,int> getCartItems()
+  {
+    return _cart;
+  }
+  double getTotalPrice()
+  {
+    double cost=0;
+    _cart.forEach((key, value) {
+      cost+=key.price*value;
+    });
+    return cost;
+  }
 
+  void makeOrder(String address)
+  {
+    _cart.clear();
+  }
 }

@@ -2,6 +2,8 @@ import 'package:demo_meal/presentation/controller/meal_controller/meal_cubit.dar
 import 'package:demo_meal/presentation/view/widgets/big_image_builder.dart';
 import 'package:demo_meal/presentation/view/widgets/big_text.dart';
 import 'package:demo_meal/presentation/view/widgets/normal_text.dart';
+import 'package:demo_meal/utils/app_constansts.dart';
+import 'package:demo_meal/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -12,12 +14,12 @@ import '../../controller/order_controller/order_cubit.dart';
 import '../widgets/app_icon.dart';
 
 class MealPage extends StatelessWidget {
-  late Meal meal;
+   Meal meal;
+   MealPage({required this.meal});
   Dimension scaleDimension = GetIt.instance.get<Dimension>();
 
   @override
   Widget build(BuildContext context) {
-    meal = BlocProvider.of<MealCubit>(context).getRecommendedMeals()[0];
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -46,7 +48,9 @@ class MealPage extends StatelessWidget {
           AppIcon(icon: Icons.arrow_back_ios, ontap: () {
             Navigator.of(context).pop();
           },),
-          AppIcon(icon: Icons.shopping_cart,)
+          AppIcon(icon: Icons.shopping_cart,ontap: (){
+            Navigator.of(context).pushNamed(Routes.cartPage);
+          },)
         ],
       ),
     );
