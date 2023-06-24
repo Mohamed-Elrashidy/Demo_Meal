@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../../data/repository/meal_repository.dart';
 import '../../../domain/entity/meal.dart';
+import '../../../domain/usecases/make_sale_usecase.dart';
 part 'meal_state.dart';
 
 class MealCubit extends Cubit<MealState> {
   MealCubit() : super(MealInitial());
-  Map<int, List<Meal>> _categoriezedMeals = {};
+  Map<int, List<Meal>> categoriezedMeals = {};
 
   getMeals() async {
     emit(MealLoading());
@@ -16,25 +17,54 @@ class MealCubit extends Cubit<MealState> {
             baseMealRepository: GetIt.instance.get<MealRepository>())
         .execute();
     // dvide each meal to its category now we have only two categories recommend( categoryCode is 0) meals and  normal meal
-    dvideMeals(meals);
+    divideMeals(meals);
     emit(MealLoaded(meals: meals));
   }
 
-  void dvideMeals(List<Meal> meals) {
-    _categoriezedMeals = {};
+  void divideMeals(List<Meal> meals) {
+    categoriezedMeals = {};
     for (var meal in meals) {
       int code = meal.categoryCode;
-      if (_categoriezedMeals.containsKey(code)) {
-        _categoriezedMeals[code]?.add(meal);
+      if (categoriezedMeals.containsKey(code)) {
+        categoriezedMeals[code]?.add(meal);
       } else {
-        _categoriezedMeals.putIfAbsent(code, () => [meal]);
+        categoriezedMeals.putIfAbsent(code, () => [meal]);
       }
     }
   }
-  List<Meal> getRecommendedMeals()
-  {
-    return _categoriezedMeals[0]??[];
+
+  List<Meal> getRecommendedMeals() {
+    return categoriezedMeals[0] ?? [];
   }
 
+  List<String> saleMealsId = [];
+  void changeState(String id) {
+    if (saleMealsId.contains(id)) {
+      saleMealsId.remove(id);
+    } else {
+      saleMealsId.add(id);
+    }
+    emit(SaleStateChanged());
+  }
 
+  bool getSaleState(String id) {
+    return saleMealsId.contains(id);
+  }
+
+  void addAllToSale() {
+    categoriezedMeals.forEach((key, value) {
+      value.forEach((element) {
+        if (!saleMealsId.contains(element.id)) {
+          saleMealsId.add(element.id);
+        }
+      });
+    });
+    emit(SaleStateChanged());
+  }
+
+  Future<void> makeSale(String title, String saleValue) async {
+    await MakeSaleUseCase(
+            baseMealRepository: GetIt.instance.get<MealRepository>())
+        .execute(saleMealsId, saleValue, title);
+  }
 }

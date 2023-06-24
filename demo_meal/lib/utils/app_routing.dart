@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../domain/entity/meal.dart';
 import '../presentation/view/pages/cart_page.dart';
 import '../presentation/view/pages/home_page.dart';
+import '../presentation/view/pages/sale_page.dart';
 import 'app_constansts.dart';
 
 class AppRouting {
@@ -24,6 +25,9 @@ class AppRouting {
       case Routes.loginPage:
         return MaterialPageRoute(
             builder: (_) => LoginPage(), settings: settings);
+        case Routes.salePage:
+        return MaterialPageRoute(
+            builder: (_) => SalePage(), settings: settings);
       default:
         return MaterialPageRoute(
             builder: (_) => BottomNavBarPage(), settings: settings);

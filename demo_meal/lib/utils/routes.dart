@@ -6,5 +6,6 @@ class Routes{
   static const String loginPage="lib/presentation/view/pages/login_page.dart";
   static const String profilePage="lib/presentation/view/pages/profile_page.dart";
   static const String bottomNavBarPage="lib/presentation/view/pages/bottom_nav_bar.dart";
+  static const String salePage="lib/presentation/view/pages/sale_page.dart";
 
 }

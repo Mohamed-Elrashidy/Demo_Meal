@@ -21,7 +21,9 @@ class ProfilePage extends StatelessWidget {
       child: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_appBarBuilder(), _bodyBuilder(context),
+          children: [
+            _appBarBuilder(),
+            _bodyBuilder(context),
           ],
         ),
       ),
@@ -37,15 +39,19 @@ class ProfilePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(width: scaleDimension.scaleWidth(50),),
+            Container(
+              width: scaleDimension.scaleWidth(50),
+            ),
             BigText(text: "Profile"),
             BlocBuilder<UserCubit, UserState>(
               builder: (context, state) {
-                return (state is UserInfoLoaded)?IconButton(onPressed: () {
-                  BlocProvider.of<UserCubit>(context).signOut();
-                }, icon: Icon(Icons.logout_outlined)
-                ):Container(width: scaleDimension.scaleWidth(50)
-                );
+                return (state is UserInfoLoaded)
+                    ? IconButton(
+                        onPressed: () {
+                          BlocProvider.of<UserCubit>(context).signOut();
+                        },
+                        icon: Icon(Icons.logout_outlined))
+                    : Container(width: scaleDimension.scaleWidth(50));
               },
             )
           ],
@@ -65,13 +71,12 @@ class ProfilePage extends StatelessWidget {
         isLogin = true;
         user = state.user;
       }
-      if(state is UserLoggedOut)
-        isLogin=false;
-      return isLogin ? loggedPage() : unLoggedPage(context);
+      if (state is UserLoggedOut) isLogin = false;
+      return isLogin ? loggedPage(context) : unLoggedPage(context);
     });
   }
 
-  Widget loggedPage() {
+  Widget loggedPage(BuildContext context) {
     // draw ui related to logged in user
     return Padding(
       padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
@@ -85,12 +90,22 @@ class ProfilePage extends StatelessWidget {
           loggedPageItem("Email", user!.email),
           loggedPageItem("Phone", user!.phone),
           loggedPageItem("address", user!.address),
-
-          SizedBox(height: scaleDimension.scaleHeight(100),),
-          (user!.level == 0) ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MainButton(title: "Make Sale", onTap: () {})],) : Container()
+          SizedBox(
+            height: scaleDimension.scaleHeight(100),
+          ),
+          (user!.level == 0)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MainButton(
+                        title: "Make Sale",
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true)
+                              .pushNamed(Routes.salePage);
+                        })
+                  ],
+                )
+              : Container()
         ],
       ),
     );
@@ -103,8 +118,8 @@ class ProfilePage extends StatelessWidget {
       child: Center(
         child: InkWell(
           onTap: () {
-            Navigator.of(context, rootNavigator: true).pushNamed(
-                Routes.loginPage);
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed(Routes.loginPage);
           },
           child: Container(
             width: scaleDimension.screenWidth - scaleDimension.scaleWidth(30),
@@ -112,7 +127,7 @@ class ProfilePage extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius:
-                BorderRadius.circular(scaleDimension.scaleWidth(20))),
+                    BorderRadius.circular(scaleDimension.scaleWidth(20))),
             child: Center(
                 child: BigText(text: "Sign In", size: 40, color: Colors.white)),
           ),
@@ -140,6 +155,4 @@ class ProfilePage extends StatelessWidget {
       ],
     );
   }
-
-
 }

@@ -19,5 +19,10 @@ class MealRepository extends BaseMealRepository{
    }
     return meals;
   }
+
+  @override
+  Future<void> makeSale(List<String> documentIds, String saleValue, String title) async {
+   await remoteDataSource.updateDocumentAttribute(AppConstants.mealsPath, documentIds,"saleValue" , saleValue);
+  }
   
 }

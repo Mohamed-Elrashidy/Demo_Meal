@@ -32,7 +32,21 @@ async {
 
 }
 
+updateDocumentAttribute(String collectionPath,List<String> documentIds,String attributeName,String newValue)
+async {
+  final collectionReference = FirebaseFirestore.instance.collection(collectionPath);
+  for (final documentId in documentIds) {
+    final documentReference = collectionReference.doc(documentId);
+    final documentSnapshot = await documentReference.get();
 
+    if (documentSnapshot.exists) {
+      final data = documentSnapshot.data();
+      data![attributeName] = newValue;
+      await documentReference.update(data);
+    }
+  }
+
+}
 
 
 

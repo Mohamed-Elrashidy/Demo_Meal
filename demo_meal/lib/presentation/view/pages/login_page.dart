@@ -40,12 +40,12 @@ class LoginPage extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4.0),
       child: Column(
         children: [
-          _textFieldBuilder("Email", "Enter your email", emailController, true),
+          _textFieldBuilder("Email", "Enter your email", emailController),
           SizedBox(
             height: scaleDimension.scaleHeight(30),
           ),
           _textFieldBuilder(
-              "Password", "Enter your password", passwordController, true),
+              "Password", "Enter your password", passwordController),
           SizedBox(
             height: scaleDimension.scaleHeight(70),
           ),
@@ -66,11 +66,10 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _textFieldBuilder(String title, String hint,
-      TextEditingController controller, bool isFullWidth) {
+      TextEditingController controller) {
     return Container(
-      width: isFullWidth
-          ? scaleDimension.screenWidth
-          : scaleDimension.screenWidth / 2 - scaleDimension.scaleWidth(20),
+      width:
+           scaleDimension.screenWidth - scaleDimension.scaleWidth(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
