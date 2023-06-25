@@ -1,4 +1,4 @@
-# Zakker_Mobile_App
+# Demo Meal App
 ## ِAbout
 This is the first development challenge (Push Notifications) at the Bayanatz internship, main aim is to send a notification to all users and to a specific user, the app is a Meal app that shows meals and informs users when there is a sale or order status update.
 ## Target of the App
