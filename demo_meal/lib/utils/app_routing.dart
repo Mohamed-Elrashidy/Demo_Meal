@@ -12,6 +12,7 @@ import '../presentation/view/pages/sale_page.dart';
 import 'app_constansts.dart';
 
 class AppRouting {
+
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.mealPage:

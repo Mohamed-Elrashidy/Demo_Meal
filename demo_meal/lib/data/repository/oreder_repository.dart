@@ -11,10 +11,16 @@ class OrderRepository extends BaseOrderRepository {
 
   @override
   Future<void> makeOrder(Order order) async {
+    // check if it is real order or not
     if(order.price!='0.0'&&order.price!='0')
     {OrderModel orderModel = convertFromOrdertoOrderModel(order);
+      // add order to database
     await remoteDataSource.addDataDocument(
-        AppConstants.ordersPath, orderModel.toJson());}
+        AppConstants.ordersPath, orderModel.toJson());
+    // inform client the order is making now
+    await remoteDataSource.sendPushNotification("Order Status is Making", "Order id is ${order.id} ", [order.deviceToken]);
+
+    }
   }
 
   OrderModel convertFromOrdertoOrderModel(Order order) {
@@ -31,6 +37,7 @@ class OrderRepository extends BaseOrderRepository {
 
   @override
   getOrders() async {
+    // get data from data source and filter not completed orders
     List<OrderModel> orders = [];
     var data =
         await remoteDataSource.getDataCollection(AppConstants.ordersPath);
@@ -45,7 +52,8 @@ class OrderRepository extends BaseOrderRepository {
 
   @override
   updateOrderStatus(String token, String newStatus,String documentId) async {
+    // update order status field in database and inform client this update
   await  remoteDataSource.updateDocumentAttribute(AppConstants.ordersPath, [documentId], "status", newStatus);
-  await remoteDataSource.sendPushNotification("Order Status Updated", "Order with $documentId is $newStatus", [token]);
+  await remoteDataSource.sendPushNotification("Order Status is  $newStatus", "Order id is $documentId ", [token]);
   }
 }

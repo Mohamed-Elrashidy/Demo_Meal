@@ -19,44 +19,52 @@ class RunningOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(body:
-    Column(
-      children: [
-        SizedBox(height: scaleDimension.scaleHeight(20),),
-
-        BigText(text: "Running Orders"),
-        SizedBox(height: scaleDimension.scaleHeight(20),),
-        orderListBuilder()
-
-      ],
-    )
-      ,));
+    return SafeArea(
+        child: Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+            height: scaleDimension.scaleHeight(20),
+          ),
+          // page title
+          BigText(text: "Running Orders"),
+          SizedBox(
+            height: scaleDimension.scaleHeight(20),
+          ),
+          // view all orders
+          orderListBuilder()
+        ],
+      ),
+    ));
   }
 
   Widget orderListBuilder() {
     return BlocBuilder<UserCubit, UserState>(
+      //check if user is logged in to get its data to use in determining what to show
       builder: (context, state) {
         if (state is UserInfoLoaded) {
           user = state.user;
-          BlocProvider.of<OrderCubit>(context).getOrders(
-              user!.email, user!.level);
+          BlocProvider.of<OrderCubit>(context)
+              .getOrders(user!.email, user!.level);
         }
         return Container(
           height: scaleDimension.scaleHeight(500),
+          // update ui when orders fetched
           child: BlocBuilder<OrderCubit, OrderState>(
             builder: (context, state) {
-              if(state is OrderLoaded)
-                orders=state.orders;
+              if (state is OrderLoaded) orders = state.orders;
               return ListView.builder(
                   itemCount: orders.length,
                   itemBuilder: (_, index) {
-                return Column(
-                  children: [
-                    orderItem(orders[index],context),
-                    SizedBox(height: scaleDimension.scaleHeight(10),)
-                  ],
-                );
-              });
+                    return Column(
+                      children: [
+                        orderItem(orders[index], context),
+                        SizedBox(
+                          height: scaleDimension.scaleHeight(10),
+                        )
+                      ],
+                    );
+                  });
             },
           ),
         );
@@ -64,61 +72,70 @@ class RunningOrderPage extends StatelessWidget {
     );
   }
 
-  Widget orderItem(Order order,BuildContext context) {
+  Widget orderItem(Order order, BuildContext context) {
+    // draw order card
     return Container(
       padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(20))
-      ),
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(20))),
       height: scaleDimension.scaleHeight(160),
-      width: scaleDimension.screenWidth-scaleDimension.scaleWidth(20),
+      width: scaleDimension.screenWidth - scaleDimension.scaleWidth(20),
       child: Column(
         children: [
           orderField('Id', order.id),
-          SizedBox(height: scaleDimension.scaleHeight(5),),
+          SizedBox(
+            height: scaleDimension.scaleHeight(5),
+          ),
           orderField('Phone', order.phone),
-          SizedBox(height: scaleDimension.scaleHeight(5),),
+          SizedBox(
+            height: scaleDimension.scaleHeight(5),
+          ),
           orderField('Price', order.price),
-          SizedBox(height: scaleDimension.scaleHeight(10),),
-  orderField('Address', order.address),
-          SizedBox(height: scaleDimension.scaleHeight(10),),
-
+          SizedBox(
+            height: scaleDimension.scaleHeight(10),
+          ),
+          orderField('Address', order.address),
+          SizedBox(
+            height: scaleDimension.scaleHeight(10),
+          ),
+          // check if user is not client to allow to update status
           Container(
               width: scaleDimension.scaleWidth(150),
               child: InkWell(
                   onDoubleTap: () async {
-                    if(user!.level==3)
-                      return;
-                    if(order.status== "Making" )
-                      {
-                       await BlocProvider.of<OrderCubit>(context).updateOrderStatus(order.deviceToken,"Shipping",order.id);
-                      }
-                    else if(order.status=="Shipping")
-                      {
-                        await BlocProvider.of<OrderCubit>(context).updateOrderStatus(order.deviceToken,"Completed",order.id);
-
-                      }
-                    BlocProvider.of<OrderCubit>(context).getOrders(user!.email, user!.level);
+                    if (user!.level == 3) return;
+                    if (order.status == "Making") {
+                      await BlocProvider.of<OrderCubit>(context)
+                          .updateOrderStatus(
+                              order.deviceToken, "Shipping", order.id);
+                    } else if (order.status == "Shipping") {
+                      await BlocProvider.of<OrderCubit>(context)
+                          .updateOrderStatus(
+                              order.deviceToken, "Completed", order.id);
+                    }
+                    BlocProvider.of<OrderCubit>(context)
+                        .getOrders(user!.email, user!.level);
                   },
-                  child: MainButton(title: order.status,onTap: (){},)))
-
+                  child: MainButton(
+                    title: order.status,
+                    onTap: () {},
+                  )))
         ],
       ),
     );
   }
- Widget orderField(String title,String value)
-  {
+
+  Widget orderField(String title, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        NormalText(text: title+':'),
+        NormalText(text: title + ':'),
         Container(
-            width:scaleDimension.scaleWidth(290),
+            width: scaleDimension.scaleWidth(290),
             child: NormalText(text: value))
       ],
     );
   }
 }
-

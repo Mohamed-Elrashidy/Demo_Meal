@@ -39,6 +39,7 @@ class MealCubit extends Cubit<MealState> {
 
   List<String> saleMealsId = [];
   void changeState(String id) {
+    //check if meal is in sales list or not then it remove or add it respectively
     if (saleMealsId.contains(id)) {
       saleMealsId.remove(id);
     } else {
@@ -48,10 +49,12 @@ class MealCubit extends Cubit<MealState> {
   }
 
   bool getSaleState(String id) {
+    // check if meal is in sale or not
     return saleMealsId.contains(id);
   }
 
   void addAllToSale() {
+    // add all meals directly to sale
     categoriezedMeals.forEach((key, value) {
       value.forEach((element) {
         if (!saleMealsId.contains(element.id)) {

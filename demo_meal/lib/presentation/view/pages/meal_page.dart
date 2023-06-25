@@ -25,8 +25,10 @@ class MealPage extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // this stack put appBar over image widget
             Stack(
               children: [
+                // show image of meal with name written on it
                 BigImageBuilder(
                     imgPath: meal.imgPath, title: meal.name, isFullWidth: true),
                 customAppBar(context),
@@ -45,9 +47,11 @@ class MealPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          //back button
           AppIcon(icon: Icons.arrow_back_ios, ontap: () {
             Navigator.of(context).pop();
           },),
+          // cart page navigator button
           AppIcon(icon: Icons.shopping_cart,ontap: (){
             Navigator.of(context).pushNamed(Routes.cartPage);
           },)
@@ -71,6 +75,7 @@ class MealPage extends StatelessWidget {
           SizedBox(height: scaleDimension.scaleHeight(10)),
           ingredientListBuilder(),
           SizedBox(height: scaleDimension.scaleHeight(10),),
+          // show buttons for adding and removing ,show price and number of appeareanc
           addToCart(context)
 
         ],),

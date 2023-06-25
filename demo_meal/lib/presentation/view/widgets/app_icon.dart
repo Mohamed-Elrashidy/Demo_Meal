@@ -10,7 +10,7 @@ class AppIcon extends StatelessWidget {
   Dimension scaleDimension = GetIt.instance.get<Dimension>();
   @override
   Widget build(BuildContext context) {
-
+// general Icon format allow to choose icon and function to do
     return InkWell(
         onTap: ontap,
         child: Container(

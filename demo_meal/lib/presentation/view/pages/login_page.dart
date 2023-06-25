@@ -23,7 +23,6 @@ class LoginPage extends StatelessWidget {
             body: SingleChildScrollView(
           child: Column(
             children: [
-              // CustomAppBar(title: "Login"),
               SizedBox(
                 height: scaleDimension.scaleHeight(100),
               ),
@@ -36,6 +35,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _bodyBuilder(BuildContext context) {
+    // show all ui part textfields and login button
     return Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Column(

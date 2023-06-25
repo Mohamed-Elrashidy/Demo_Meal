@@ -61,6 +61,7 @@ class SalePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        // back button
         AppIcon(
           icon: Icons.arrow_back_ios_new,
           ontap: () {
@@ -115,7 +116,7 @@ class SalePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
+// show header of category that include title and select all button
        Row(
          mainAxisAlignment: MainAxisAlignment.spaceBetween,
          children: [
@@ -126,6 +127,7 @@ class SalePage extends StatelessWidget {
        ],),
         Container(
           height: scaleDimension.scaleHeight(250),
+          // draw meals when fetched
           child: BlocBuilder<MealCubit, MealState>(
             builder: (context, state) {
               if (state is MealLoaded) {
@@ -134,6 +136,7 @@ class SalePage extends StatelessWidget {
               return ListView.builder(
                   itemCount: meals.length,
                   itemBuilder: (_, index) {
+                    // show if meal selected or not
                     return BlocBuilder<MealCubit, MealState>(
                      
                       builder: (context, state) {

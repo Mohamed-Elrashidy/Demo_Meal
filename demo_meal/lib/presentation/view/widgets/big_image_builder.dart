@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../../utils/dimension_scale.dart';
 
 class BigImageBuilder extends StatelessWidget {
+  // draw meal image with title on it with full width parameter to determine to make it take all page width
   String imgPath;
   String title;
   bool isFullWidth;

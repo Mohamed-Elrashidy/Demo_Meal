@@ -18,6 +18,7 @@ class OrderCubit extends Cubit<OrderState> {
   Map<Meal, int> _cart = {};
 
   void increment(Meal meal) {
+    // increment number of units of this meal in order
     print("cart is => ");
     print(_cart);
     print(_cart.length);
@@ -31,6 +32,8 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   void decrement(Meal meal) {
+    // decrement number of units of this meal in order
+
     if (_cart.containsKey(meal)) {
       _cart[meal] = _cart[meal]! - 1;
       if (_cart[meal] == 0) {
@@ -59,8 +62,9 @@ class OrderCubit extends Cubit<OrderState> {
 
   Future<void> makeOrder(String address,String phone,String price,String token,String email) async {
 
-
+// generate Id from email and time
     String id = generateId();
+// convert list of meals and their unit numbers to specific format to be able to retrieve it
     String details = generateDetails();
 
     Order order = Order(
@@ -94,7 +98,7 @@ class OrderCubit extends Cubit<OrderState> {
 
   getOrders(String email,int level)
   async {
-
+// check if user is normal client to show his specific orders only else show all not completed orders
   var data=  await  GetRunningOrdersUseCase(baseOrderRepository: GetIt.instance.get<OrderRepository>()).execute();
   List<Order> orders=[];
   data.forEach((element) {

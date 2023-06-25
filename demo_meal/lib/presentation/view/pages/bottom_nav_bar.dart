@@ -62,12 +62,12 @@ class BottomNavBarPage extends StatelessWidget {
         activeColorPrimary: CupertinoColors.white,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),PersistentBottomNavBarItem(
-        icon: Icon(Icons.sticky_note_2_outlined),
+        icon: Icon(Icons.account_circle_outlined),
         //title: ("Notes"),
         activeColorPrimary: CupertinoColors.white,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),PersistentBottomNavBarItem(
-        icon: Icon(Icons.category_outlined),
+        icon: Icon(Icons.shopping_cart),
         //title: ("Category"),
         activeColorPrimary: CupertinoColors.white,
         inactiveColorPrimary: CupertinoColors.systemGrey,

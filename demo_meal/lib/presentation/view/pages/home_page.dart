@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../domain/entity/meal.dart';
-
+// at meals viewer only 2 meals exist but to show ui I repeated them but all appearance refer to same instance
 class HomePage extends StatelessWidget {
   List<Meal> allMeals = [];
   late Dimension scaleDimension=GetIt.instance.get<Dimension>();
@@ -102,6 +102,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget allMealsViewer() {
+    // vertical viewer
     return Padding(
       padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
       child: Column(
@@ -146,6 +147,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget imageViewer(String imgPath) {
+    // concern with image part at all meals section
     return ClipRRect(
       borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(15)),
       child: Image.network(

@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class RemoteDataSource {
-//get data from firebase
+//get data from firebase collections
   Future<List<Map<String, dynamic>>> getDataCollection(String path) async {
     // make reference to data endpoint
     CollectionReference collectionReference =
@@ -29,7 +29,7 @@ class RemoteDataSource {
 print(dataList);*/
     return dataList;
   }
-
+//get Data from firebase Documentation
   getDataDocumentation(String collectionPath, String documentId) async {
     CollectionReference data =
         FirebaseFirestore.instance.collection(collectionPath);
@@ -37,7 +37,7 @@ print(dataList);*/
     print("data is => " + datafetched.data().toString());
     return datafetched.data() as Map<String, dynamic>;
   }
-
+// add document to specific collection with Id generated at app
   addDataDocument(String collectionPath, dynamic data) async {
     print('reached => ' + data.toString());
     final collectionReference =
@@ -45,11 +45,12 @@ print(dataList);*/
     final documentReference = collectionReference.doc(data['id']);
     await documentReference.set(data);
   }
-
+// update special field in many documents at specific collection
   updateDocumentAttribute(String collectionPath, List<String> documentIds,
       String attributeName, String newValue) async {
     final collectionReference =
         FirebaseFirestore.instance.collection(collectionPath);
+    // check if documents exist and then update
     for (final documentId in documentIds) {
       final documentReference = collectionReference.doc(documentId);
       final documentSnapshot = await documentReference.get();
@@ -74,8 +75,10 @@ print(dataList);*/
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
-  // send notification
+
+  // send notification to one or more devices at the same time
   Future<void> sendPushNotification(String title, String body, List<String> deviceTokens) async {
+    // key for the firebase messaging service
     final serverKey = 'AAAA05iK2IE:APA91bGSAPbkQzRPP1iVNLzlqQoNX4HahR37T7Y8xaEztuQUxpduMTADEDD2sHpkdRmsz55x_qTzTlFg-DCD1HvJ1Myxp1eudCmwJKzhAbjcoEgz5nEMB8Sc7yDazw7-5i4vnpG_4H4n'; // Replace with your FCM server key
 
     final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
@@ -98,7 +101,12 @@ print(dataList);*/
   }
 
 
-  //// notification services
+  //// notification services///
+  /*
+  when app in background or terminated it  notification appear from server directly
+  but if app is in foreground we will need to use flutter local notification plugin
+  */
+  // make android channel to recieve notification
   final androidChannel = const AndroidNotificationChannel(
       "high_importance_channel", "High Importance Notifications",
       description: "This Channel is used for important notification",
@@ -114,7 +122,7 @@ print(dataList);*/
     final platform=localNotification.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     await platform?.createNotificationChannel(androidChannel);
   }
-
+  // function that init notification service in the device and get permission
   Future<void> initNotifications() async {
     await firebaseMessaging.requestPermission();
     final fcmToken = await firebaseMessaging.getToken();
@@ -125,7 +133,6 @@ print(dataList);*/
     initPushNotifications();
     initLocalNotification();
 
-    // function that handle notification when app is foreground
   }
 
   Future initPushNotifications() async {
@@ -157,7 +164,7 @@ print(dataList);*/
 
   }
 }
-
+// control what should appear when app not in foreground
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('Title: ${message.notification?.title}');
   print('Title: ${message.notification?.body}');

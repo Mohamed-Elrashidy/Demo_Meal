@@ -38,6 +38,7 @@ class CartPage extends StatelessWidget {
   }
 
   Widget customAppBar(BuildContext context) {
+    // contains only back button
     return Padding(
       padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
       child: AppIcon(
@@ -50,10 +51,12 @@ class CartPage extends StatelessWidget {
   }
 
   Widget cartContentViewer() {
+    //list all meals and their number, and allow you to increase and decrease their number
     return Container(
       height: scaleDimension.scaleHeight(400),
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
+
           Map<Meal, int> cart =
               BlocProvider.of<OrderCubit>(context).getCartItems();
           List<Meal> cartItems = [];
@@ -63,6 +66,7 @@ class CartPage extends StatelessWidget {
             numOfApperance.add(value);
           });
           return ListView.builder(
+            // list that each each cart Item specifically
               itemCount: cartItems.length,
               itemBuilder: (_, index) {
                 return Padding(
@@ -87,6 +91,7 @@ class CartPage extends StatelessWidget {
   }
 
   Widget imageViewer(String imgPath) {
+    // concern with image part at cart Item
     return ClipRRect(
       borderRadius: BorderRadius.circular(scaleDimension.scaleWidth(15)),
       child: Image.network(
@@ -161,6 +166,7 @@ class CartPage extends StatelessWidget {
 
   Widget textFieldBuilder(
       String title, String hint, TextEditingController controller) {
+
     return Container(
       padding: EdgeInsets.all(scaleDimension.scaleWidth(10)),
       width: scaleDimension.screenWidth,

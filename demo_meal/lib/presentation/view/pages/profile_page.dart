@@ -43,6 +43,7 @@ class ProfilePage extends StatelessWidget {
               width: scaleDimension.scaleWidth(50),
             ),
             BigText(text: "Profile"),
+            // check if user logged in to show logout button
             BlocBuilder<UserCubit, UserState>(
               builder: (context, state) {
                 return (state is UserInfoLoaded)
@@ -65,7 +66,7 @@ class ProfilePage extends StatelessWidget {
 
   Widget _bodyBuilder(BuildContext context) {
     bool isLogin = false;
-    //
+    // determine to show Sign in button or user data
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       if (state is UserInfoLoaded) {
         isLogin = true;
