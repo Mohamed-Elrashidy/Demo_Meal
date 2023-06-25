@@ -6,7 +6,7 @@ This is the first development challenge (Push Notifications) at the Bayanatz int
 *  Send a notification to specific users
 *  code must follow clean architecture
 *  code must be commented
-*  being accepted in the internship
+*  being accepted into the internship
  
 ## Features :dart:
 * [x] Send a notification to all users when there is a sale
@@ -40,5 +40,5 @@ This is the first development challenge (Push Notifications) at the Bayanatz int
 
 
  ### Notes
-  * You need to give permission to the app to work in background to make the notifications service work correctly
-  * If the selected text is Arabic this may result in bad formatting we will work on this in the next version.
+  * This simple app contains the necessary functions to provide a good environment to make the task.
+  * signup feature does not exist
